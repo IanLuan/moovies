@@ -16,7 +16,7 @@ abstract class _MovieControllerBase with Store {
   ObservableList<Movie> movies;
 
   @action
-  loadPosts() async {
+  getPopularMovies() async {
     movies =
         ObservableList<Movie>.of(await _movieRepository.getPopularMovies());
   }

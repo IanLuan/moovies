@@ -24,11 +24,12 @@ mixin _$MovieController on _MovieControllerBase, Store {
     });
   }
 
-  final _$loadPostsAsyncAction = AsyncAction('_MovieControllerBase.loadPosts');
+  final _$getPopularMoviesAsyncAction =
+      AsyncAction('_MovieControllerBase.getPopularMovies');
 
   @override
-  Future loadPosts() {
-    return _$loadPostsAsyncAction.run(() => super.loadPosts());
+  Future getPopularMovies() {
+    return _$getPopularMoviesAsyncAction.run(() => super.getPopularMovies());
   }
 
   @override

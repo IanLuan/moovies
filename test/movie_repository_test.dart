@@ -6,7 +6,7 @@ void main() {
   test("Should get popular movies", () async {
     final _movieRepository = MovieRepository();
 
-    var _popularMovies = await _movieRepository.getPopularMovies();
+    List<Movie> _popularMovies = await _movieRepository.getPopularMovies();
 
     expect(_popularMovies.length, greaterThan(0));
   });
