@@ -28,8 +28,18 @@ mixin _$MovieController on _MovieControllerBase, Store {
       AsyncAction('_MovieControllerBase.getPopularMovies');
 
   @override
-  Future getPopularMovies() {
-    return _$getPopularMoviesAsyncAction.run(() => super.getPopularMovies());
+  Future getPopularMovies({int page}) {
+    return _$getPopularMoviesAsyncAction
+        .run(() => super.getPopularMovies(page: page));
+  }
+
+  final _$morePopularMoviesAsyncAction =
+      AsyncAction('_MovieControllerBase.morePopularMovies');
+
+  @override
+  Future morePopularMovies({int page}) {
+    return _$morePopularMoviesAsyncAction
+        .run(() => super.morePopularMovies(page: page));
   }
 
   @override

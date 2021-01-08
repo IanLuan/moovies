@@ -3,7 +3,7 @@ import 'package:moovies/models/movie_model.dart';
 import 'package:moovies/shared/constants.dart';
 
 class MovieRepository {
-  Future<List<Movie>> getPopularMovies({int page = 1}) async {
+  Future<List<Movie>> getPopularMovies({int page}) async {
     List<Movie> popularMovies = List();
 
     try {
@@ -11,6 +11,7 @@ class MovieRepository {
           await Dio().get(Constants.BASE_POPULAR_MOVIES_URL + '$page');
       response.data['results']
           .forEach((item) => popularMovies.add(Movie.fromJson(item)));
+      print(popularMovies[0].posterPath);
       return popularMovies;
     } catch (e) {
       print(e);

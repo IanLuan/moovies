@@ -44,7 +44,7 @@ class Movie {
     popularity = json['popularity'];
     voteCount = json['vote_count'];
     video = json['video'];
-    voteAverage = json['vote_average'];
+    voteAverage = json['vote_average'].toDouble();
   }
 
   Map<String, dynamic> toJson() {

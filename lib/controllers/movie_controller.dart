@@ -16,8 +16,15 @@ abstract class _MovieControllerBase with Store {
   ObservableList<Movie> movies;
 
   @action
-  getPopularMovies() async {
-    movies =
-        ObservableList<Movie>.of(await _movieRepository.getPopularMovies());
+  getPopularMovies({int page}) async {
+    movies = ObservableList<Movie>.of(
+        await _movieRepository.getPopularMovies(page: page));
+  }
+
+  @action
+  morePopularMovies({int page}) async {
+    //Movie movie1 = Movie(posterPath: "/cfhfcEt4bOXuVZkTC0nNBpqqiWb.jpg");
+    List<Movie> newMovies = await _movieRepository.getPopularMovies(page: page);
+    movies.addAll(newMovies);
   }
 }
