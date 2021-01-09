@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:moovies/models/movie_model.dart';
 import 'package:moovies/repositories/movie_repository.dart';
-part 'movie_controller.g.dart';
-
+import 'package:rx_notifier/rx_notifier.dart';
+/*
 class MovieController = _MovieControllerBase with _$MovieController;
 
 abstract class _MovieControllerBase with Store {
@@ -26,5 +27,16 @@ abstract class _MovieControllerBase with Store {
     //Movie movie1 = Movie(posterPath: "/cfhfcEt4bOXuVZkTC0nNBpqqiWb.jpg");
     List<Movie> newMovies = await _movieRepository.getPopularMovies(page: page);
     movies.addAll(newMovies);
+  }
+}
+
+*/
+
+class MovieController {
+  final _movieRepository = MovieRepository();
+  final movies = ValueNotifier([]).asRx();
+
+  getPopularMovies({int page}) async {
+    movies.value = await _movieRepository.getPopularMovies(page: page);
   }
 }
