@@ -1,9 +1,9 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:moovies/controllers/movie_controller.dart';
+import 'package:moovies/viewmodel/trending_viewmodel.dart';
 import 'package:moovies/shared/constants.dart';
+import 'package:rx_notifier/rx_notifier.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -11,98 +11,144 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  MovieController _movieController;
-  int _currentPage = 1;
-  String message = "opaa";
+  TrendingViewModel trendingViewModel;
 
   @override
   void initState() {
     super.initState();
-    _movieController = MovieController();
-    _movieController.getPopularMovies(page: 1);
-  }
-
-  _onStartScroll(ScrollMetrics metrics) {
-    setState(() {
-      message = "Scroll Start";
-    });
-  }
-
-  _onUpdateScroll(ScrollMetrics metrics) {
-    setState(() {
-      if (metrics.extentAfter <= 50) {
-        _currentPage++;
-        _movieController.morePopularMovies(page: _currentPage);
-      }
-    });
-  }
-
-  _onEndScroll(ScrollMetrics metrics) {
-    setState(() {
-      message = "end";
-    });
+    trendingViewModel = TrendingViewModel();
+    trendingViewModel.getPopularMovies(page: 1);
+    trendingViewModel.getUpcomingMovies(page: 1);
+    trendingViewModel.getPopularPeople(page: 1);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {},
-          )
-        ],
-        title: Text(message),
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 12.0, top: 8.0, bottom: 4.0),
-            child: Text(
-              "Lançamentos",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+                Text("Moovies",
+                    style: GoogleFonts.openSans(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold)),
+                IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
+              ],
             ),
           ),
           Container(
-            height: 170,
-            child: Observer(
-              builder: (context) {
-                final list = _movieController.movies;
-                return list != null
-                    ? NotificationListener<ScrollNotification>(
-                        onNotification: (scrollNotification) {
-                          if (scrollNotification is ScrollStartNotification) {
-                            _onStartScroll(scrollNotification.metrics);
-                          } else if (scrollNotification
-                              is ScrollUpdateNotification) {
-                            _onUpdateScroll(scrollNotification.metrics);
-                          } else if (scrollNotification
-                              is ScrollEndNotification) {
-                            _onEndScroll(scrollNotification.metrics);
-                          }
-                        },
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: list.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(
-                                  left: index == 0 ? 12 : 8,
-                                  right: index == list.length - 1 ? 9 : 0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5.0),
-                                child: Image.network(
-                                  Constants.BASE_IMAGE_URL +
-                                      '${list[index].posterPath}',
-                                  height: 170,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            );
-                          },
+            margin: const EdgeInsets.only(
+                top: 4.0, left: 16, right: 16, bottom: 20),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 3,
+                      blurRadius: 7,
+                      offset: Offset(0, 3))
+                ]),
+            child: SizedBox(
+              width: double.infinity,
+              height: 45,
+              child: RaisedButton(
+                padding: EdgeInsets.all(0),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                elevation: 0,
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: 10, bottom: 10, left: 12, right: 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          Text("Search on films",
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300)),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      width: 45,
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple[900],
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
                         ),
+                      ),
+                      child: Icon(
+                        Icons.tune,
+                        color: Colors.white,
+                      ),
+                    )
+                  ],
+                ),
+                onPressed: () {},
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12.0, top: 12.0, bottom: 12.0),
+            child: Text(
+              "Popular this week",
+              style: GoogleFonts.openSans(
+                  fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Container(
+            height: 180,
+            padding: EdgeInsets.only(bottom: 12),
+            child: RxBuilder(
+              builder: (_) {
+                final list = trendingViewModel.popularMovies.value;
+                return list != null
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(
+                                left: index == 0 ? 12 : 12,
+                                right: index == list.length - 1 ? 9 : 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                Constants.BASE_IMAGE_URL +
+                                    '${list[index].posterPath}',
+                                height: 180,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          );
+                        },
                       )
                     : Center(
                         child: CircularProgressIndicator(),
@@ -110,44 +156,81 @@ class _HomeViewState extends State<HomeView> {
               },
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12.0, top: 12.0, bottom: 12.0),
+            child: Text(
+              "Popular actors this week",
+              style: GoogleFonts.openSans(
+                  fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+          ),
           Container(
-            height: 170,
-            child: Observer(
-              builder: (context) {
-                final list = _movieController.movies;
+            height: 180,
+            padding: EdgeInsets.only(bottom: 12),
+            child: RxBuilder(
+              builder: (_) {
+                final list = trendingViewModel.popularPeople.value;
                 return list != null
-                    ? NotificationListener<ScrollNotification>(
-                        onNotification: (scrollNotification) {
-                          if (scrollNotification is ScrollStartNotification) {
-                            _onStartScroll(scrollNotification.metrics);
-                          } else if (scrollNotification
-                              is ScrollUpdateNotification) {
-                            _onUpdateScroll(scrollNotification.metrics);
-                          } else if (scrollNotification
-                              is ScrollEndNotification) {
-                            _onEndScroll(scrollNotification.metrics);
-                          }
-                        },
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: list.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.only(
-                                  left: index == 0 ? 12 : 8,
-                                  right: index == list.length - 1 ? 9 : 0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5.0),
-                                child: Image.network(
-                                  Constants.BASE_IMAGE_URL +
-                                      '${list[index].posterPath}',
-                                  height: 170,
-                                  fit: BoxFit.fill,
-                                ),
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(
+                                left: index == 0 ? 12 : 12,
+                                right: index == list.length - 1 ? 9 : 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                Constants.BASE_IMAGE_URL +
+                                    '${list[index].posterPath}',
+                                height: 180,
+                                fit: BoxFit.fill,
                               ),
-                            );
-                          },
-                        ),
+                            ),
+                          );
+                        },
+                      )
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12.0, top: 12.0, bottom: 12.0),
+            child: Text(
+              "Upcoming films",
+              style: GoogleFonts.openSans(
+                  fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+          ),
+          Container(
+            height: 180,
+            padding: EdgeInsets.only(bottom: 12),
+            child: RxBuilder(
+              builder: (_) {
+                final list = trendingViewModel.upcomingMovies.value;
+                return list != null
+                    ? ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: list.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(
+                                left: index == 0 ? 12 : 12,
+                                right: index == list.length - 1 ? 9 : 0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.network(
+                                Constants.BASE_IMAGE_URL +
+                                    '${list[index].posterPath}',
+                                height: 180,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          );
+                        },
                       )
                     : Center(
                         child: CircularProgressIndicator(),
