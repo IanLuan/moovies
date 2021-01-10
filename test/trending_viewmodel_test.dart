@@ -14,4 +14,9 @@ void main() {
     await trendingViewModel.getUpcomingMovies(page: 1);
     expect(trendingViewModel.upcomingMovies.value.length, greaterThan(0));
   });
+
+  test("Should get popular people", () async {
+    await trendingViewModel.getPopularPeople(page: 1);
+    expect(trendingViewModel.popularPeople.value.length, greaterThan(0));
+  });
 }
