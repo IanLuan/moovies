@@ -1,6 +1,6 @@
 # moovies
 
-A new Flutter project.
+A fully-functional movie app made with Flutter and The Movie Database API.
 
 ## Getting Started
 
