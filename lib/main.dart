@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moovies/views/home_view.dart';
+import 'package:moovies/views/markdown_view.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Colors.grey[200],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeView(),
+      home: MarkdownView(),
     );
   }
 }
