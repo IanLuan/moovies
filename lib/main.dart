@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moovies/views/home_view.dart';
 import 'package:moovies/views/markdown_view.dart';
+import 'package:moovies/views/bubbles.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,11 +16,11 @@ class MyApp extends StatelessWidget {
       title: 'Mooviess',
       theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: Colors.deepPurpleAccent,
-        scaffoldBackgroundColor: Colors.grey[200],
+        primaryColor: Color(0xFF1432C5),
+        scaffoldBackgroundColor: Colors.grey[100],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MarkdownView(),
+      home: HomeView(),
     );
   }
 }

@@ -229,6 +229,7 @@ class _HomeViewState extends State<HomeView> {
                                       left: index == 0 ? 12 : 12,
                                       right: index == list.length - 1 ? 9 : 0),
                                   child: CircleAvatar(
+                                    backgroundColor: Colors.grey,
                                     minRadius: 60,
                                     backgroundImage: NetworkImage(
                                         Constants.BASE_IMAGE_URL +
